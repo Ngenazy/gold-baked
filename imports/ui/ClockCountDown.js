@@ -77,13 +77,15 @@ console.log(time);
     let hours       = Math.floor((time / (1000 * 60 * 60)) % 24);
     let days        = Math.floor(time / (1000 * 60 * 60 * 24));
 
+
+    if (time < 0) {
+    clearInterval(this.intervalID);
+  }else{
     daysSpan.innerHTML    = days;
     hoursSpan.innerHTML   = ('0' + hours).slice(-2);
     minutesSpan.innerHTML = ('0' + minutes).slice(-2);
     secondsSpan.innerHTML = ('0' + seconds).slice(-2);
 
-    if (time <= 0) {
-    clearInterval(this.intervalID);
   }
 
 }
