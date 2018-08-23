@@ -1,0 +1,124 @@
+
+html{
+  font-size: 62.5%;
+}
+
+body{
+  font-family: Helvetica,Verdana,sans-serif, Arial;
+  font-size: $base-font-size;
+  background-color: black;//#21283e;//#fafafa;
+}
+
+h1{
+  font-weight: 300;
+  margin-bottom: $space;
+  color: #fd961a;
+}
+
+h2{
+  font-size: $large-font-size;
+  margin-bottom: $space;
+  color: white;//#fd961a;
+}
+
+p{
+  margin-bottom: $space;
+}
+
+a{
+  color:black;
+}
+
+input[type="text"], input[type="email"], input[type="password"]{
+  background: #181818;
+  border: 1px solid #fd961a;//$input-border;
+  font-size: $base-font-size;
+  margin-bottom: $space;
+  padding: $input-spacing;
+
+
+}
+///////////////////////////////////////////////////////////////
+// base stuff
+
+body {
+  font-family: Helvetica, sans-serif;
+  margin: 3rem;
+}
+
+table {
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+}
+
+th {
+  background-color: #eee;
+  border-bottom: 1px solid #eee;
+  font-weight: 600;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+td {
+  border-bottom: 1px solid #eee;
+  padding: 0.75rem;
+}
+
+tr,
+td,
+th {
+  vertical-align: middle;
+}
+
+// magic stuff
+
+@media (max-width: 600px - 1px) {
+
+	table, thead, tbody, th, td, tr {
+		display: block;
+	}
+
+	thead tr {
+    display: none;
+	}
+
+	td {
+		border: none;
+	}
+
+	td:before {
+    color: #00bdea;
+    font-weight: bold;
+    margin-right: .5rem;
+    display: inline-block;
+	}
+
+	td:nth-of-type(2):before { content: "Seed Fund"; }
+	td:nth-of-type(3):before { content: "Weekly Payout"; }
+	td:nth-of-type(4):before { content: "Total/Month"; }
+}
+//======================= Media Queries =======================
+/* Mobile Styles */
+@media only screen and (max-width: 400px) {
+  body {
+    //background-color: #F09A9D; /* Red */
+  }
+}
+
+
+/* Tablet Styles */
+@media only screen and (min-width: 401px) and (max-width: 960px) {
+  body {
+    //background-color: #F5CF8E; /* Yellow */
+  }
+}
+
+/* Desktop Styles */
+@media only screen and (min-width: 961px) {
+  body {
+    //background-color: #B2D6FF; /* Blue */
+  }
+}

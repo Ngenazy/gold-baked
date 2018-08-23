@@ -1,0 +1,12 @@
+
+//Block
+.staff-filter{
+//float: right;
+border: 1px solid green;
+}
+
+//Elements
+.staff-filter__checkbox{
+  display: flex;
+  justify-content: space-between;
+}

@@ -1,0 +1,17 @@
+.page-content{
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  color: #999;
+  background-color: #1d1d1d;//#545454;//#6e1dbf;//#323e5c; //#fff;
+  max-width: $site-max-width;
+  border: 0.2px solid #545454;//#3d86eb;//#fd961a;//$brand-primary;//#dcdcdc;
+  border-radius: 8px;
+
+  margin: 33px auto;
+  padding: $space;
+  overflow: auto;
+}

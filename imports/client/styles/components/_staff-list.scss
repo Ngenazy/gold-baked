@@ -1,0 +1,13 @@
+
+//Block
+.staff-list{
+  //float: left;
+  border: 1px solid red;
+}
+
+//Element
+.staff-list__member{
+  display: flex;
+  justify-content: space-between;
+  background-color: red;
+}
