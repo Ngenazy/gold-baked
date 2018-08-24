@@ -32,8 +32,8 @@ const  LoginView = ({ ...props }) => (
         <button className="button">Login</button>
 
       </form>
-
-      <Link to = '/signup'>Have an Account?</Link>
+    <br/>
+      <Link to = '/signup'>CREATE ACCOUNT</Link>
     </div>
   </div>
 )

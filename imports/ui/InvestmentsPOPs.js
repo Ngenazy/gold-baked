@@ -6,16 +6,17 @@ import {Accounts }                 from 'meteor/accounts-base';
 //import containers
 import  PrivateHeader              from './PrivateHeader';
 import  JFeeItem                   from './JFeeItem';
-
+import  CFeeItem                   from './CFeeItem';
+import  InvItem                    from './InvItem';
 //import APIs
-import { JoiningFeesCol }          from '../api/xbuxAPI';
+import { CapitalFeesCol  }         from '../api/xbuxAPI';
 
-class AdminPanel extends React.Component{
+class InvestmentsPOPs extends React.Component{
 
   constructor(props) {
       super(props);
       //initialize state
-      this.state = { joiningFees:[] }
+      this.state = { capitalFees:[]  }
   }
 
   //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -24,8 +25,8 @@ class AdminPanel extends React.Component{
     this.collectionsTracker = Tracker.autorun(() => {
 
       //subscribe to plansPub
-      Meteor.subscribe('users');
-      Meteor.subscribe('joiningFeesPool');
+      Meteor.subscribe('capitalFeesPool');
+
       //get custom data(fields)
       const userDetails01 = Meteor.users.find(
                               { _id:    Meteor.userId()   },
@@ -35,10 +36,10 @@ class AdminPanel extends React.Component{
       const userDetails02 = { ...userDetails01 };
       const userDetails   = { ...userDetails02.userDetails } ;
 
-      const joiningFees   = JoiningFeesCol.find({}).fetch();
+      const capitalFees   = CapitalFeesCol.find({}).fetch();
 
       //set state's plan options
-      this.setState({ joiningFees  });
+      this.setState({ capitalFees  });
     });
 
   }
@@ -59,24 +60,24 @@ class AdminPanel extends React.Component{
     const props = this._generateProps();
 
     //check if collection is empty
-    if (this.state.joiningFees.length === 0)
+    if (this.state.capitalFees.length === 0)
     {
       return (
         <div >
-          <p >No Investment Plans.</p>
+          <p >No Investments Proofs of Paymets.</p>
         </div>
       );
     }
 
-    const joiningFeesList = this.state.joiningFees.map((xbux) => {
+    const capitalFeesList = this.state.capitalFees.map((xbux) => {
       //pack the lock together with data
-      return  <JFeeItem key = {xbux._id} {...this.props } { ...xbux }  />;
+      return  <CFeeItem key = {xbux._id} {...this.props } { ...xbux }  />;
     });
 
     return (
       <div>
           <PrivateHeader { ...props } />
-          {  joiningFeesList }
+          {  capitalFeesList }
       </div>
 
     );
@@ -86,5 +87,5 @@ class AdminPanel extends React.Component{
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 //::::::::::::::::::::::::::
-export default AdminPanel;
+export default InvestmentsPOPs;
 //::::::::::::::::::::::::::

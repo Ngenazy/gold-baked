@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: $boxed-view-overlay-bg;
+  background: black;//$boxed-view-overlay-bg;
   height: 100vh;
   width: 100vw;
 }
@@ -22,6 +22,8 @@
   padding: 2.4rem;
   text-align: center;
   width: 24rem;
+  border: 0.2px solid #545454;//#3d86eb;//#fd961a;//$brand-primary;//#dcdcdc;
+  border-radius: 8px;
 }
 
 .boxed-view__form{

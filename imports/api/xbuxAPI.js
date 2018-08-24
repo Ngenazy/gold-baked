@@ -162,7 +162,7 @@ console.log(paymentDetails);
 
   //epoch
   let nowMoment       = moment();
-  let paymentDeadline = nowMoment.add(2, 'minutes');
+  let paymentDeadline = nowMoment.add(6, 'hours');
   let unixEpoch       = paymentDeadline.valueOf();
 
   //insert POP record
