@@ -43,7 +43,7 @@ class AppBaseLayout extends React.Component{
             <PrivateRoute exact path="/pledge"          component={ PledgePage          } />
             <PrivateRoute exact path="/incoming-orders" component={ IncomingOrdersPage  } />
             <PrivateRoute exact path="/xxx33xxx"        component={ AdminPanel          } />
-            <PrivateRoute exact path="/xxx34xxx"        component={ Investments         } />
+            <PrivateRoute exact path="/xxx34xxx"        component={ InvestmentsPool     } />
             <Route        exact path="/not-found"       component={ NotFound            } />
             <Redirect     to="/not-found"/>
           </Switch>
