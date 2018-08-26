@@ -21,7 +21,7 @@ class InvestmentsPool extends React.Component{
   //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   componentDidMount(){
      //Track changes
-    this.collectionsTracker = Tracker.autorun(() => {
+    this.investmetsPoolTracker = Tracker.autorun(() => {
 
       //subscribe to plansPub
       Meteor.subscribe('users');
@@ -46,7 +46,7 @@ class InvestmentsPool extends React.Component{
   //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   componentWillUnmount(){
     //halt package list tracker
-    this.collectionsTracker.stop();
+    this.investmentsPoolTracker.stop();
   }
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
