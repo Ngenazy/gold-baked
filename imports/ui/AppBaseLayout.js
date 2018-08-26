@@ -20,6 +20,8 @@ import PackageDetails     from './PackageDetails';
 import PledgePage         from './PledgePage';
 import IncomingOrdersPage from './IncomingOrdersPage';
 import AdminPanel         from './AdminPanel';
+import InvestmentsPool    from './investmentsPool';
+
 import NotFound           from './NotFound';
 import PrivateRoute       from './PrivateRoute';
 
@@ -41,6 +43,7 @@ class AppBaseLayout extends React.Component{
             <PrivateRoute exact path="/pledge"          component={ PledgePage          } />
             <PrivateRoute exact path="/incoming-orders" component={ IncomingOrdersPage  } />
             <PrivateRoute exact path="/xxx33xxx"        component={ AdminPanel          } />
+            <PrivateRoute exact path="/xxx34xxx"        component={ Investments         } />
             <Route        exact path="/not-found"       component={ NotFound            } />
             <Redirect     to="/not-found"/>
           </Switch>

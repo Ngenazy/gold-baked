@@ -119,12 +119,15 @@ console.log(paymentDetails);
     }
   }).validate({ paymentDetails })
 
+
   //insert POP record
   JoiningFeesCol.insert({
     _id:       this.userId,
     voucherNum:   paymentDetails.voucherNum,
     voucherPin:   paymentDetails.voucherPin,
     bankToRedeem: paymentDetails.bankToRedeem,
+    showConfirm:  true,  //flag to cotrol display of view to confirm details
+    confirmed:    false,
     submittedAt:  new Date().getTime()
   });
 
@@ -267,6 +270,8 @@ console.log(paymentDetails);
     const userDetails   =  userDetails02.userDetails;
 
    console.log(userDetails);
+
+   //TODO: compute date time (+6hrs) for POP submission
     //insert order
     InvestmentsCol.insert({
       _id:         this.userId,
