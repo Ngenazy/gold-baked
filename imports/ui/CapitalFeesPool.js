@@ -5,27 +5,27 @@ import {Tracker  }                 from 'meteor/tracker';
 import {Accounts }                 from 'meteor/accounts-base';
 //import containers
 import  PrivateHeader              from './PrivateHeader';
-import  JFeeItem                   from './JFeeItem';
+import  CFeeItem                   from './CFeeItem';
 
 //import APIs
-import { JoiningFeesCol }          from '../api/xbuxAPI';
+import { CapitalFeesCol }          from '../api/xbuxAPI';
 
 class CapitalFees extends React.Component{
 
   constructor(props) {
       super(props);
       //initialize state
-      this.state = { joiningFees:[] }
+      this.state = { capitalFees:[] }
   }
 
   //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   componentDidMount(){
      //Track changes
-    this.collectionsTracker = Tracker.autorun(() => {
+    this.capitalFeesTracker = Tracker.autorun(() => {
 
       //subscribe to plansPub
       Meteor.subscribe('users');
-      Meteor.subscribe('joiningFeesPool');
+      Meteor.subscribe('capitalFeesPool');
       //get custom data(fields)
       const userDetails01 = Meteor.users.find(
                               { _id:    Meteor.userId()   },
@@ -35,10 +35,10 @@ class CapitalFees extends React.Component{
       const userDetails02 = { ...userDetails01 };
       const userDetails   = { ...userDetails02.userDetails } ;
 
-      const joiningFees   = JoiningFeesCol.find({}).fetch();
+      const joiningFees   = CapitalFeesCol.find({}).fetch();
 
       //set state's plan options
-      this.setState({ joiningFees  });
+      this.setState({ capitalFees  });
     });
 
   }
@@ -46,7 +46,7 @@ class CapitalFees extends React.Component{
   //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   componentWillUnmount(){
     //halt package list tracker
-    this.collectionsTracker.stop();
+    this.capitalFeesTracker.stop();
   }
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -59,25 +59,25 @@ class CapitalFees extends React.Component{
     const props = this._generateProps();
 
     //check if collection is empty
-    if (this.state.joiningFees.length === 0)
+    if (this.state.capitalFees.length === 0)
     {
       return (
         <div >
-          <p >No Investment Plans.</p>
+          <p >No Investmet Capital POPs.</p>
         </div>
       );
     }
 
-    const joiningFeesList = this.state.joiningFees.map((xbux) => {
+    const capitalFeesList = this.state.capitalFees.map((xbux) => {
       //pack the lock together with data
-      return  <JFeeItem key = {xbux._id} {...this.props } { ...xbux }  />;
+      return  <CFeeItem key = {xbux._id} {...this.props } { ...xbux }  />;
     });
 
     return (
       <div>
           <PrivateHeader { ...props } />
-          <Link to='/login'>Visit Login Page</Link>
-          {  joiningFeesList }
+          <Link to='/xxx34xxx'>All Investments</Link>
+          {  capitalFeesList }
       </div>
 
     );

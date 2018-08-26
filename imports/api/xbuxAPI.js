@@ -32,18 +32,19 @@ if (Meteor.isServer) {
     return InvestmentsCol.find({ _id: this.userId });
   });
 
-  //xxx33xxx subs'
-  //
+  //xxx3*xxx subs'
+
+  //xxx33xxx
   Meteor.publish('joiningFeesPool', function(){
     return JoiningFeesCol.find({ });
   });
 
-  //
+  //xxx34xxx
   Meteor.publish('capitalFeesPool', function(){
     return CapitalFeesCol.find({ });
   });
 
-  //
+  //xxx35xxx
   Meteor.publish('investmentsPool', function(){
     return InvestmentsCol.find({ });
   });
@@ -272,6 +273,7 @@ console.log(paymentDetails);
    console.log(userDetails);
 
    //TODO: compute date time (+6hrs) for POP submission
+
     //insert order
     InvestmentsCol.insert({
       _id:         this.userId,

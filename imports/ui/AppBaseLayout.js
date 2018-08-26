@@ -20,7 +20,7 @@ import PackageDetails     from './PackageDetails';
 import PledgePage         from './PledgePage';
 import IncomingOrdersPage from './IncomingOrdersPage';
 import AdminPanel         from './AdminPanel';
-import InvestmentsPool    from './investmentsPool';
+import InvestmentsPool    from './InvestmentsPool';
 
 import NotFound           from './NotFound';
 import PrivateRoute       from './PrivateRoute';
