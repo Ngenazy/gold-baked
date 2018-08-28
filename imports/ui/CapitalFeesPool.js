@@ -3,6 +3,7 @@ import  React                      from 'react';
 import {Meteor   }                 from 'meteor/meteor';
 import {Tracker  }                 from 'meteor/tracker';
 import {Accounts }                 from 'meteor/accounts-base';
+import { Link }                    from 'react-router-dom';
 //import containers
 import  PrivateHeader              from './PrivateHeader';
 import  CFeeItem                   from './CFeeItem';
@@ -10,7 +11,7 @@ import  CFeeItem                   from './CFeeItem';
 //import APIs
 import { CapitalFeesCol }          from '../api/xbuxAPI';
 
-class CapitalFees extends React.Component{
+class CapitalFeesPool extends React.Component{
 
   constructor(props) {
       super(props);
@@ -35,7 +36,7 @@ class CapitalFees extends React.Component{
       const userDetails02 = { ...userDetails01 };
       const userDetails   = { ...userDetails02.userDetails } ;
 
-      const joiningFees   = CapitalFeesCol.find({}).fetch();
+      const capitalFees   = CapitalFeesCol.find({}).fetch();
 
       //set state's plan options
       this.setState({ capitalFees  });
@@ -63,6 +64,7 @@ class CapitalFees extends React.Component{
     {
       return (
         <div >
+            <PrivateHeader { ...props } />
           <p >No Investmet Capital POPs.</p>
         </div>
       );
@@ -76,7 +78,12 @@ class CapitalFees extends React.Component{
     return (
       <div>
           <PrivateHeader { ...props } />
-          <Link to='/xxx34xxx'>All Investments</Link>
+          <ul>
+            <li><Link to='/xxx33xxx'>Joining Fees POPs</Link></li>
+            <li><Link to='/xxx34xxx'>Investments</Link></li>
+          </ul>
+
+
           {  capitalFeesList }
       </div>
 
@@ -87,5 +94,5 @@ class CapitalFees extends React.Component{
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 //::::::::::::::::::::::::::
-export default CapitalFees;
+export default CapitalFeesPool;
 //::::::::::::::::::::::::::

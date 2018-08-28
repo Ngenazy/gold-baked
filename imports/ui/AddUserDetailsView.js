@@ -23,7 +23,7 @@ const AddUserDetailsView = ({...props}) => (
 
               <input
                 type="text"
-                name="bank"
+                name="userBank"
                 className = "form__input"
                 placeholder="Bank"
                 onChange={props.handleChange}
@@ -31,7 +31,7 @@ const AddUserDetailsView = ({...props}) => (
 
               <input
                 type="text"
-                name="bankAcc"
+                name="userBankAcc"
                 className = "form__input"
                 placeholder="Bank Account"
                 onChange={props.handleChange}

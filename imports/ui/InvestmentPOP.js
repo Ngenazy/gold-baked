@@ -1,6 +1,7 @@
 import   React                from 'react';
 import   InvestmentPOPView    from './InvestmentPOPView';
 
+
 class InvestmentPOP extends React.Component{
 
   constructor(props){

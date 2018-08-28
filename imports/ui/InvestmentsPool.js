@@ -3,9 +3,10 @@ import  React                      from 'react';
 import {Meteor   }                 from 'meteor/meteor';
 import {Tracker  }                 from 'meteor/tracker';
 import {Accounts }                 from 'meteor/accounts-base';
+import { Link }                    from 'react-router-dom';
 //import containers
 import  PrivateHeader              from './PrivateHeader';
-import  InvItem                   from './InvItem';
+import  InvItem                    from './InvItem';
 
 //import APIs
 import { InvestmentsCol }          from '../api/xbuxAPI';
@@ -21,7 +22,7 @@ class InvestmentsPool extends React.Component{
   //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   componentDidMount(){
      //Track changes
-    this.investmetsPoolTracker = Tracker.autorun(() => {
+    this.investmentsPoolTracker = Tracker.autorun(() => {
 
       //subscribe to plansPub
       Meteor.subscribe('users');
@@ -35,8 +36,8 @@ class InvestmentsPool extends React.Component{
       const userDetails02 = { ...userDetails01 };
       const userDetails   = { ...userDetails02.userDetails } ;
 
-      const investments   = investmentsCol.find({}).fetch();
-
+      const investments   = InvestmentsCol.find({}).fetch();
+console.log(investments);
       //set state's plan options
       this.setState({ investments });
     });
@@ -76,7 +77,12 @@ class InvestmentsPool extends React.Component{
     return (
       <div>
           <PrivateHeader { ...props } />
-          <Link to='/xxx33xxx'>Joining Fees POPs</Link>
+          <ul>
+            <li><Link to='/xxx33xxx'>Joining Fees POPs</Link></li>
+            <li><Link to='/xxx35xxx'>Capital Fees POPs</Link></li>
+          </ul>
+
+
           {  investmentsList }
       </div>
 

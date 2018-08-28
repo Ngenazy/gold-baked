@@ -26,10 +26,10 @@ class JFeeItem extends React.Component{
   //Handle pledge submission
   handlePledgeRequest = (e) => {
     //e.preventDefault();
-    const packageName = e.target.name;
+    const userIDtoActivate = e.target.name;
 
-     Meteor.call('investment.create', packageName);
-     this.props.history.replace('/package-details');//  /submit-pop
+     Meteor.call('jfee.pop.confirm', userIDtoActivate);
+     //this.props.history.replace('/package-details');//  /submit-pop
   }
 
   //function to generate props

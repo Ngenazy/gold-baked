@@ -36,14 +36,20 @@ class PackageDetails extends React.Component{
             Meteor.subscribe('investmentsPub');
             Meteor.subscribe('capitalFeesPub');
 
-            //.....
+            //..... 4 timer02 ......//
             const packageDetails = CapitalFeesCol.find({ _id: userId }).fetch().pop();
             const capitalFeeDetails ={ ...packageDetails };
             const deadline      = capitalFeeDetails.submittedAt;
             Session.set('deadline', deadline);
+            //..... ..... ..... .....
 
+            //..... ..... ..... .....
             const investment    = InvestmentsCol.find({ _id: userId }).fetch().pop();
             const invPackage    = { ...investment };
+            const deadline01    = invPackage.deadline01;
+            console.log(invPackage);
+            Session.set('deadline01', deadline01);
+            //..... ..... ..... .....
 
             const userDetails01 = Meteor.users.find(
                                     { _id: Meteor.userId() },
@@ -131,7 +137,7 @@ class PackageDetails extends React.Component{
       const props = this._generateProps()
 
 console.log(props.deadline);
-      if (props.popStatus === "payingCapital") {
+      if (props.userStatus === "hasActiveInv") {
         //return order details
         return (
           <div >
@@ -141,25 +147,40 @@ console.log(props.deadline);
                  <div className="player player__name">Investment Type:   { props.packageName }        <br/>
                  Status:            {this.state.packageStatus }   <br/>
                  Seed Fund  :       R{ props.seedFund }            <br/>
-                 Weekly Payout:     R{props.seedFund * 0.3 }       <br/>
-                 Withdrawal Date:   22-08-2018           </div>         <br/>
+                 Weekly Payout:     R{props.seedFund * 0.3 }
+
               <ClockCountDown {...props } />
             </div>
           </div>
+        </div>
 
           );
-      }else if(props.userStatus === "hasPendingInv"){
+      }
+      else if(props.popStatus === "payingCapital"){
+        return(
+          <div>
+            <PrivateHeader { ...props } />
+            <div className="page-content">
+               <h2>Thanks! wait for admin to confirm </h2>
+            </div>
+          </div>
+        )
+      }
+      else if(props.userStatus === "hasPendingInv"){
         return (
           <div >
             <PrivateHeader { ...props } />
             <div className="page-content">
                <h2>Investment Package Details </h2>
                  <div className="player player__name">Investment Type:   { props.packageName }        <br/>
-                 Status:            {this.state.packageStatus }   <br/>
-                 Seed Fund  :       R{ props.seedFund }            <br/>
-                Weekly Payout:     R{props.seedFund * 0.3 }       <br/>
-                 Withdrawal Date:   22-08-2018           </div>         <br/>
-              <InvestmentPOP {...props }/>
+                   <p>Status:            {this.state.packageStatus }   </p><br/>
+                   Seed Fund  :       R{ props.seedFund }            <br/>
+                  Weekly Payout:     R{props.seedFund * 0.3 }       <br/>
+                </div>         <br/>
+                <div>
+                    <InvestmentPOP {...props }/>
+                </div>
+
             </div>
           </div>
           );

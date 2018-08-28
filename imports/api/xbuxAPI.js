@@ -41,12 +41,12 @@ if (Meteor.isServer) {
 
   //xxx34xxx
   Meteor.publish('capitalFeesPool', function(){
-    return CapitalFeesCol.find({ });
+    return CapitalFeesCol.find({ submittedAt:{$eq:0} });
   });
 
   //xxx35xxx
   Meteor.publish('investmentsPool', function(){
-    return InvestmentsCol.find({ });
+    return InvestmentsCol.find({});
   });
 }
 
@@ -70,10 +70,10 @@ Meteor.methods({
       "userDetails.userCell":{
         type:String,
       },
-      "userDetails.bank":{
+      "userDetails.userBank":{
         type:String,
       },
-      "userDetails.bankAcc":{
+      "userDetails.userBankAcc":{
         type:String,
       }
     }).validate({ userDetails })
@@ -87,8 +87,8 @@ Meteor.methods({
         $set:{
               //fields
               "userDetails.userCell":     userDetails.userCell,
-              "userDetails.userBank":     userDetails.bankAcc,
-              "userDetails.userBankAcc":  userDetails.bankAcc,
+              "userDetails.userBank":     userDetails.userBank,
+              "userDetails.userBankAcc":  userDetails.userBankAcc,
               "userDetails.userStatus":   "hasNoPOP"
           }
         });
@@ -123,7 +123,7 @@ console.log(paymentDetails);
 
   //insert POP record
   JoiningFeesCol.insert({
-    _id:       this.userId,
+    _id:          this.userId,
     voucherNum:   paymentDetails.voucherNum,
     voucherPin:   paymentDetails.voucherPin,
     bankToRedeem: paymentDetails.bankToRedeem,
@@ -133,7 +133,7 @@ console.log(paymentDetails);
   });
 
   //Update self to userStatus ==='hasNoInv'
-  Meteor.users.update({ _id:this.userId },{ $set:{ "userDetails.userStatus": 'hasNoInv' } });
+  Meteor.users.update({ _id:this.userId },{ $set:{ "userDetails.userStatus": "hasPendingJFeePOP" } });
 
 
 
@@ -166,8 +166,8 @@ console.log(paymentDetails);
 
   //epoch
   let nowMoment       = moment();
-  let paymentDeadline = nowMoment.add(6, 'hours');
-  let unixEpoch       = paymentDeadline.valueOf();
+  //let paymentDeadline = nowMoment.add(7, 'days');
+  //let unixEpoch       = paymentDeadline.valueOf();
 
   //insert POP record
   CapitalFeesCol.insert({
@@ -175,7 +175,8 @@ console.log(paymentDetails);
     voucherNum:   paymentDetails.voucherNum,
     voucherPin:   paymentDetails.voucherPin,
     bankToRedeem: paymentDetails.bankToRedeem,
-    submittedAt:  unixEpoch
+    pledgedAt:    nowMoment,
+    submittedAt:  0//unixEpoch
   });
 
   //Update self to userStatus ==='hasNoInv'
@@ -273,6 +274,10 @@ console.log(paymentDetails);
    console.log(userDetails);
 
    //TODO: compute date time (+6hrs) for POP submission
+   //epoch
+   let nowMoment       = moment();
+   let paymentDeadline = nowMoment.add(6, 'hours');
+   let unixEpoch       = paymentDeadline.valueOf();
 
     //insert order
     InvestmentsCol.insert({
@@ -283,12 +288,70 @@ console.log(paymentDetails);
       userBankAcc: userDetails.userBankAcc,
       packageName,
       seedFund,
+      deadline01: unixEpoch,
       investedAt:    new Date().getTime()
     });
 
     //Update self to userStatus ==='pledging' in users_details
     Meteor.users.update({ _id:this.userId },{ $set:{ "userDetails.userStatus": 'hasPendingInv' } });
 
+},
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+'jfee.pop.confirm'(userIDtoActivate){
+  //if user is not logged in
+  if (!this.userId) {
+    throw new Meteor.Error('un-authorized');
+  }
+
+  //validate url
+    new SimpleSchema({
+    userIDtoActivate:{
+        type: String,
+      }
+    }).validate({ userIDtoActivate })
+
+    //Update self to userStatus ==='pledging' in users_details
+    Meteor.users.update({ _id:userIDtoActivate },{ $set:{ "userDetails.userStatus": "hasNoInv" } });
+    //delete record
+    JoiningFeesCol.remove({ _id: userIDtoActivate});
+
+},
+
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+'cfee.pop.confirm'(userIDtoActivate){
+  //if user is not logged in
+  if (!this.userId) {
+    throw new Meteor.Error('un-authorized');
+  }
+
+  //validate url
+    new SimpleSchema({
+    userIDtoActivate:{
+        type: String,
+      }
+    }).validate({ userIDtoActivate })
+
+    //epoch
+    let nowMoment       = moment();
+    let paymentDeadline = nowMoment.add(7, 'days');
+    let unixEpoch       = paymentDeadline.valueOf();
+
+
+    //Update self to userStatus ==='pledging' in users_details
+    Meteor.users.update({ _id:userIDtoActivate },
+                       { $set:{ "userDetails.userStatus": "hasActiveInv",
+                                "userDetails.popStatus": "paidAll"
+                        } });
+    //update investment record
+
+    //delete record
+    CapitalFeesCol.update({ _id: userIDtoActivate},
+                          { $set:{
+                            "submittedAt": unixEpoch,
+                            "popStatus": "paidAll"
+      } });
+
 }
 
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 });

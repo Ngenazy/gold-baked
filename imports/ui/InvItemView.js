@@ -1,6 +1,5 @@
 import    React       from 'react';
 import    ReactDOM    from 'react-dom';
-import    { Link }    from 'react-router-dom';
 import {  PropTypes } from 'prop-types';
 import    FlipMove    from 'react-flip-move';
 
@@ -11,22 +10,22 @@ const InvItemView = ( props ) => (
           <thead>
             <tr>
               <th>User Name</th>
-              <th>Voucher Pin</th>
-              <th>Redeem Bank</th>
-              <th>Action</th>
+              <th>Cellphone</th>
+              <th>Seed Fund</th>
+              <th>Interest</th>
+              <th>Bank</th>
+              <th>Acc#</th>
             </tr>
           </thead>
 
           <tbody>
             <tr>
-              <td>{ props.voucherNum          }</td>
-              <td>{ props.voucherPin          }</td>
-              <td>{ props.bankToRedeem        }</td>
-              <td>
-              <button
-                onClick={props.handlePledgeRequest}
-                name={ props._id }>Activate User</button>
-              </td>
+              <td>{ props.userName          }</td>
+              <td>{ props.userCell          }</td>
+              <td>R{ props.seedFund         }</td>
+              <td>R{ props.seedFund * 0.3   }</td>
+              <td>{ props.bank          }</td>
+              <td>{ props.bankAcc       }</td>
             </tr>
           </tbody>
         </table>

@@ -35,7 +35,7 @@ class PayFee extends React.Component{
          if (!err) {
           //TODO:Maybe change state.
           //and replacing the route
-          this.props.history.replace('/invest'); //'/submit-pop'
+          this.props.history.replace('/wait-jfee-confirmation'); //'/submit-pop'
          }else{
            this.setState({error:err.reason});
          }

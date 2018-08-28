@@ -76,14 +76,20 @@ class Login extends React.Component{
                     this.props.history.replace('/pay-fee');
 
                  }
+                 else if ( userDetails.userStatus  === 'hasPendingJFeePOP')
+                 {  //>
+                    this.props.history.replace('/wait-jfee-confirmation');
+
+                 }
                  else if ( userDetails.userStatus  === 'hasNoInv')
                  {  //>
                     this.props.history.replace('/invest');
                  }
-                 else if ( userDetails.userStatus  === 'hasPendingInv')
+                 else if ( (userDetails.userStatus  === 'hasPendingInv') || (userDetails.userStatus  === 'hasActiveInv'))
                  {  //>
                     this.props.history.replace('/package-details');
                  }
+
                  else if ( userDetails.userStatus  === 'xxx33xxx')
                  {  //>
                     this.props.history.replace('/xxx33xxx');

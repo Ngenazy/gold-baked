@@ -1,16 +1,12 @@
 import   React                from 'react';
-import   AddUserDetailsView   from './AddUserDetailsView';
 import   PrivateHeader        from './PrivateHeader';
 
-class AddUserDetails extends React.Component{
+class WaitingJFeeConfPanel extends React.Component{
 
   constructor(props){
     super(props);
     //initialize state
-    this.state = {
-      error:'',
-      userDetails: { userCell:'',userBank:'', userBankAcc:'' }
-    };
+    this.state = { };
   }
 
 /*------------------------------------------------------------------------------/
@@ -20,37 +16,14 @@ class AddUserDetails extends React.Component{
   submitDetails = (e) => {
     //prevent default action
     e.preventDefault();
-
-    //signup form input data
-    const userDetails = this.state.userDetails;
-
-   /*------------------------------------------------------/
-   ///////  Insert user details into collection  //////////
-   /------------------------------------------------------*/
-    Meteor.call('user.details.insert', userDetails, (err, res) => {
-         if (!err) {
-           //and replacing the route
-           this.props.history.replace('/pay-fee');
-         }else{
-           this.setState({error:err.reason});
-           console.log(err);
-         }
-    });
   }
 
 /*------------------------------------------------------------------------------/
-////////// Signup Form Inputs onChangeHandler (onChange callback)  //////////////
+//////////         onChangeHandler (onChange callback)            //////////////
 /------------------------------------------------------------------------------*/
   //Listens to form input element changes
   handleChange = (event) => {
 
-    //creating a dummy object to modify
-    /* ###   dummy object UserDetails = { userName: value, bank: value etc.. } ### */
-    let userDetails = { ...this.state.userDetails };
-    //modify current matching key in cloned object
-    userDetails[ event.target.name ] = event.target.value;
-    //set state to modified object
-    this.setState({ userDetails });
     }
 
 /*------------------------------------------------------------------------------/
@@ -69,11 +42,12 @@ class AddUserDetails extends React.Component{
     return(
       <div>
         <PrivateHeader { ...props } />
-        <AddUserDetailsView
-                  {/* Keys this side */ ...props /*Values this side*/ }
-                  submitDetails ={ this.submitDetails }
-                  handleChange  ={ this.handleChange  }
-                />
+        <div className="page-content" >
+          <h1>Congratulations!</h1>
+          Thank you for submission of e-wallet/cash as your joining fee payment to join this platform, in order to turn around your financial situation for good through investment.
+            <h1>Be Patient</h1> while admin process your request to participate.Once your payment is approved.The system will allow to move to the <h2>NEXT STEP</h2>This process will take up to
+             6 hours to complete.
+        </div>
       </div>
 
           );
@@ -82,4 +56,4 @@ class AddUserDetails extends React.Component{
 }
 
 //==> Export Component ==>//
-export default  AddUserDetails;
+export default  WaitingJFeeConfPanel;

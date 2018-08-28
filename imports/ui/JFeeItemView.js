@@ -25,7 +25,7 @@ const JFeeItemView = ( props ) => (
               <td>
               <button
                 onClick={props.handlePledgeRequest}
-                name={ props.fee_id }>Activate User</button>
+                name={ props._id }>Activate User</button>
               </td>
             </tr>
           </tbody>

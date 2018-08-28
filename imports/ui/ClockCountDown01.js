@@ -7,12 +7,12 @@ import { PropTypes }    from 'prop-types';
 import   moment         from 'moment';
 
 
-class ClockCountDown extends React.Component{
+class ClockCountDown01 extends React.Component{
 
   constructor(props){
     super(props);
     //initialize state
-    this.state = { deadline: 0 };
+    this.state = { deadline01: 0 };
   }
 
 /*------------------------------------------------------------------------------/
@@ -58,30 +58,32 @@ componentDidMount(){
   componentWillUnmount(){
     //clean up....
     clearInterval(this.intervalID);
+    console.log('cleaned...');
   }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 tick(){
 
-    let clock       = document.getElementById('clockdiv');
-    let daysSpan    = clock.querySelector('.days');
-    let hoursSpan   = clock.querySelector('.hours');
-    let minutesSpan = clock.querySelector('.minutes');
-    let secondsSpan = clock.querySelector('.seconds');
+    let clock01       = document.getElementById('clock01div');
+    //let daysSpan    = clock.querySelector('.days');
+    let hoursSpan   = clock01.querySelector('.hours');
+    let minutesSpan = clock01.querySelector('.minutes');
+    let secondsSpan = clock01.querySelector('.seconds');
 
-    let deadline    = Session.get('deadline');
+    let deadline01    = Session.get('deadline01');
+    console.log(deadline01);
     //time remaining..
-    let time        = deadline - moment().valueOf()
-console.log(time);
+    let time        = deadline01 - moment().valueOf()
+
     let seconds     = Math.floor((time / 1000) % 60);
     let minutes     = Math.floor((time / 1000 / 60) % 60);
     let hours       = Math.floor((time / (1000 * 60 * 60)) % 24);
-    let days        = Math.floor(time / (1000 * 60 * 60 * 24));
+    //let days        = Math.floor(time / (1000 * 60 * 60 * 24));
 
 
     if (time < 0) {
     clearInterval(this.intervalID);
   }else{
-    daysSpan.innerHTML    = days;
+    //daysSpan.innerHTML    = days;
     hoursSpan.innerHTML   = ('0' + hours).slice(-2);
     minutesSpan.innerHTML = ('0' + minutes).slice(-2);
     secondsSpan.innerHTML = ('0' + seconds).slice(-2);
@@ -98,12 +100,8 @@ console.log(time);
 
     return(
       <div>
-        <h4></h4>
-        <div id="clockdiv">
-          <div>
-            <span className="days">0</span>
-            <div  className="smalltext">Days</div>
-          </div>
+        <h3>Within</h3>
+        <div id="clock01div">
           <div>
             <span className="hours">0</span>
             <div  className="smalltext">Hours</div>
@@ -125,4 +123,4 @@ console.log(time);
 }
 
 //==> Export Component ==>//
-export default ClockCountDown;
+export default ClockCountDown01;

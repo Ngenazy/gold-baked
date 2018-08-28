@@ -3,6 +3,7 @@ import  React                      from 'react';
 import {Meteor   }                 from 'meteor/meteor';
 import {Tracker  }                 from 'meteor/tracker';
 import {Accounts }                 from 'meteor/accounts-base';
+import { Link }                    from 'react-router-dom';
 //import containers
 import  PrivateHeader              from './PrivateHeader';
 import  JFeeItem                   from './JFeeItem';
@@ -76,6 +77,11 @@ class AdminPanel extends React.Component{
     return (
       <div>
           <PrivateHeader { ...props } />
+          <ul>
+            <li><Link to='/xxx34xxx'>Investments</Link></li>
+            <li><Link to='/xxx35xxx'>Investments POPs</Link></li>
+          </ul>
+
           {  joiningFeesList }
       </div>
 
