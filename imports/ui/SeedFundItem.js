@@ -4,9 +4,9 @@ import { Meteor   }                 from 'meteor/meteor';
 import { Accounts }                 from 'meteor/accounts-base';
 import { PropTypes }                from 'prop-types';
 import   FlipMove                   from 'react-flip-move';
-import   CFeeItemView               from './CFeeItemView';
+import   SeedFundItemView           from './SeedFundItemView';
 
-class CFeeItem extends React.Component{
+class SeedFundItem extends React.Component{
 
   constructor(props) {
       super(props);
@@ -23,12 +23,28 @@ class CFeeItem extends React.Component{
 
   }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-  //Handle pledge submission
-  handlePledgeRequest = (e) => {
-    //e.preventDefault();
-    const userIDtoActivate = e.target.name;
 
-     Meteor.call('cfee.pop.confirm', userIDtoActivate);
+  renderTimeLapsed(){
+    // const visitMessage = this.props.visitCount === 1 ? 'Visit' : 'Visits';
+    // let visitedMessage = null;
+
+    if (typeof this.props.proofSubmittedAt === 'number'){
+
+      let proofSubmittedAt         = null;
+      let timeLapsed           = moment(this.props.proofSubmittedAt).fromNow();
+
+      return timeLapsed ;
+    }
+
+
+  }
+//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+  //Handle pledge submission
+  confirmSeedFundProof = (e) => {
+    //e.preventDefault();
+    const userIDtoUnlockInvestment = e.target.name;
+
+     Meteor.call('confirm.seed.fund.proof', userIDtoUnlockInvestment);
      //this.props.history.replace('/package-details');//  /submit-pop
   }
 
@@ -36,8 +52,13 @@ class CFeeItem extends React.Component{
   _generateProps = () => ({  ...this.props,  ...this.state  })
 
   render(){
-      return( <CFeeItemView  { ...this.props } handlePledgeRequest = { this.handlePledgeRequest } />)
+      return( <SeedFundItemView
+                { ...this.props }
+                confirmSeedFundProof = { this.confirmSeedFundProof }
+                renderTimeLapsed    = { this.renderTimeLapsed()  }
+               />
+    )
   }
 }
 
-export default CFeeItem;
+export default SeedFundItem;

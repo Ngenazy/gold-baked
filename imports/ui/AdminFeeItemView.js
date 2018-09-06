@@ -4,7 +4,7 @@ import    { Link }    from 'react-router-dom';
 import {  PropTypes } from 'prop-types';
 import    FlipMove    from 'react-flip-move';
 
-const JFeeItemView = ( props ) => (
+const AdminFeeItemView = ( props ) => (
 
       <div >
         <table>
@@ -13,6 +13,7 @@ const JFeeItemView = ( props ) => (
               <th>Voucher Number</th>
               <th>Voucher Pin</th>
               <th>Redeem Bank</th>
+              <th>Submitted</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -22,10 +23,17 @@ const JFeeItemView = ( props ) => (
               <td>{ props.voucherNum          }</td>
               <td>{ props.voucherPin          }</td>
               <td>{ props.bankToRedeem        }</td>
+              <td>{ props.renderTimeLapsed    }</td>
               <td>
               <button
-                onClick={props.handlePledgeRequest}
-                name={ props._id }>Activate User</button>
+                onClick={props.activateUser}
+                name={ props._id }>Activate User
+              </button>
+
+              <button
+                onClick={props.rejectAdminProof}
+                name={ props._id }>Reject Proof
+              </button>
               </td>
             </tr>
           </tbody>
@@ -34,4 +42,4 @@ const JFeeItemView = ( props ) => (
       </div>
     )
 
-export default JFeeItemView;
+export default AdminFeeItemView;

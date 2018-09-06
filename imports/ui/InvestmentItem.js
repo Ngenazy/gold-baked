@@ -4,9 +4,9 @@ import { Meteor   }                 from 'meteor/meteor';
 import { Accounts }                 from 'meteor/accounts-base';
 import { PropTypes }                from 'prop-types';
 import   FlipMove                   from 'react-flip-move';
-import   InvItemView               from './InvItemView';
+import   InvestmentItemView         from './InvestmentItemView';
 
-class InvItem extends React.Component{
+class InvestmentItem extends React.Component{
 
   constructor(props) {
       super(props);
@@ -24,20 +24,20 @@ class InvItem extends React.Component{
   }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   //Handle pledge submission
-  handlePledgeRequest = (e) => {
+  blockInvestment = (e) => {
     //e.preventDefault();
-    const packageName = e.target.name;
+    const investmentIDtoBlock = e.target.name;
 
-     Meteor.call('investment.create', packageName);
-     this.props.history.replace('/package-details');//  /submit-pop
+    Meteor.call('block.investment', investmentIDtoBlock);
+    //this.props.history.replace('/package-details');//  /submit-pop
   }
 
   //function to generate props
   _generateProps = () => ({  ...this.props,  ...this.state  })
 
   render(){
-      return( <InvItemView  { ...this.props } handlePledgeRequest = { this.handlePledgeRequest } />)
+      return( <InvestmentItemView  { ...this.props } handlePledgeRequest = { this.handlePledgeRequest } />)
   }
 }
 
-export default InvItem;
+export default InvestmentItem;

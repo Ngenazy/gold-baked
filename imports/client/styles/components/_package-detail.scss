@@ -1,0 +1,17 @@
+.package--detail{
+    color: #fd961a;
+}
+
+.status__active{
+    color: #0ba026;
+}
+
+.status__inactive{
+    color: #FF0000;
+}
+
+.package--pair{
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+}

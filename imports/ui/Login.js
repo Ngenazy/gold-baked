@@ -1,10 +1,9 @@
 import   React                from 'react';
-import   LoginView            from './LoginView';
+import   LoginForm            from './LoginForm';
 import { Meteor }             from 'meteor/meteor';
 import { Session }            from 'meteor/session';
-import { withRouter }         from 'react-router-dom';
-//import APIs
-import { UsersCollection }    from '../api/xbuxAPI';
+import { withRouter }         from 'react-router-dom'; //HOC
+import moment from 'moment';
 
 class Login extends React.Component{
   constructor(props){
@@ -14,101 +13,65 @@ class Login extends React.Component{
     this.state = {  loginError:'', username:'', password:'', isAuth:false};
   }
 
-  componentDidMount(){
-
-  }
   //Handles login form submission
   submitHandler = (e) => {
-       e.preventDefault();
+    e.preventDefault();
 
-       let username    = this.state.username;
-       let password = this.state.password;
-        Meteor.loginWithPassword({ username }, password ,(err) => {
-            //if there is no error
-            if (err)
-            {
-              this.setState({ loginError:err.reason });
-            }
-            else{
+    let username    = this.state.username;
+    let password    = this.state.password;
 
-              //cleaning up previous error msgs
-              this.setState({ loginError:'',isAuth:true });
+    Meteor.loginWithPassword({ username }, password ,(err) => {
+      //if error
+      if (err){
+        this.setState({ loginError:err.reason });
+      }
+      else{
+        //clear previous error msgs
+        this.setState({loginError:' '});
+        //Track changes to pledge_orders_menu
+        this.detailsTracker = Tracker.autorun(() => {
+          //
+          const userDetails01 = Meteor.users.find(
+                                  { _id: Meteor.userId() },
+                                  {fields: { "userDetails.userStatus":1 }}
+                                ).fetch()[0];
 
-              //TODO: to apply conditional redirection after login
-              //Track changes to pledge_orders_menu
-              this.detailsTracker = Tracker.autorun(() => {
+          const userDetails02 =  { ...userDetails01 };
+          const userDetails   =  userDetails02.userDetails;
 
-                 //subscribe to userDetailsPub
-                 //Meteor.subscribe('userDetailsPub');
+          //set userStatus into session variable
+          Session.set('userStatus',userDetails.userStatus);
 
-                  const userDetails01 = Meteor.users.find(
-                                                        { _id: Meteor.userId() },
-                                                        {
-                                                          fields: {
-                                                            "userDetails.userBankAcc":1,
-                                                            "userDetails.userStatus":1,
-                                                            "userDetails.userLevel":1
-                                                                  }
-                                                        }).fetch()[0];
+          if ( userDetails.userStatus       === 'userWithoutWalletDetails'){
+              this.props.history.replace('/add-wallet-details');
+           }
+          else if ( userDetails.userStatus  === 'userWithoutAdminFeeProof'){
+              this.props.history.replace('/pay-admin-fee');
+           }
+          else if ( userDetails.userStatus  === 'userWithAdminFeeProof'){
+              this.props.history.replace('/wait-admin-response');
+           }
+          else if ( userDetails.userStatus  === 'userWithInvalidAdminFeeProof'){
+              this.props.history.replace('/pay-admin-fee');
+           }else if ( userDetails.userStatus=== 'userWithValidAdminFeeProof'){
+              this.props.history.replace('/invest');
+           }
+          else if ( userDetails.userStatus  === 'userWithLockedInvestment' ||
+                  ( userDetails.userStatus  === 'userWithSeedFundProof')){
+              this.props.history.replace('/package-details');
+           }
+          else if ( userDetails.userStatus  === 'userWithActiveInvestment' ||
+                  ( userDetails.userStatus  === 'userWithDefaultedPayment')){
+              this.props.history.replace('/package-details');
+           }
+          else if ( userDetails.userStatus  === 'xxx33xxx'){
+              this.props.history.replace('/xxx33xxx');
+           }
+         });
+      }
+    });
+  }
 
-                  const userDetails02 = { ...userDetails01 };
-                  const userDetails   =  userDetails02.userDetails;
-
-                  //set userStatus into session variable
-                  Session.set('userStatus',userDetails.userStatus);
-
-                 if ( userDetails.userStatus  === 'hasNoBank')
-                 {  //>
-                   //if (userDetails.userBankAcc === undefined) {
-                     //has not added x details
-                     this.props.history.push('/add-details');
-
-                   //}
-                   //else
-                   //{
-                     //let's go do it >>
-                     //this.props.history.replace('/pledge');
-                   //}
-
-                 }
-                 else if ( userDetails.userStatus  === 'hasNoPOP')
-                 {  //>
-                    this.props.history.replace('/pay-fee');
-
-                 }
-                 else if ( userDetails.userStatus  === 'hasPendingJFeePOP')
-                 {  //>
-                    this.props.history.replace('/wait-jfee-confirmation');
-
-                 }
-                 else if ( userDetails.userStatus  === 'hasNoInv')
-                 {  //>
-                    this.props.history.replace('/invest');
-                 }
-                 else if ( (userDetails.userStatus  === 'hasPendingInv') || (userDetails.userStatus  === 'hasActiveInv'))
-                 {  //>
-                    this.props.history.replace('/package-details');
-                 }
-
-                 else if ( userDetails.userStatus  === 'xxx33xxx')
-                 {  //>
-                    this.props.history.replace('/xxx33xxx');
-                 }
-
-               });
-            }
-          });
-
-          // if (this.state.isAuth) {
-          //   this.props.history.push('/links');
-          //   console.log(this.props.history);
-          // }
-    }
-
-    // componentWillUnmount(){
-    //   console.log('componentWillUnmount');
-    //   this.detailsTracker.stop();
-    // }
     //Listens to form input element changes and update state
     handleChange = (event) => {
       this.setState({
@@ -127,7 +90,7 @@ class Login extends React.Component{
       const props = this._generateProps()
 
       return(
-        <LoginView
+        <LoginForm
 
           { ...props }
           submitHandler ={ this.submitHandler }

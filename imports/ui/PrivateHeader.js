@@ -10,8 +10,12 @@ export default class PrivateHeader extends React.Component{
 
   //Handles onclick logout button event
   onLogout = (e) => {
-       Accounts.logout();
-       this.props.history.push('/login');
+    //clean up session variables
+    Session.keys = {};
+    //byeee...
+    Accounts.logout();
+    this.props.history.push('/login');
+
     }
 
   //function to generate props

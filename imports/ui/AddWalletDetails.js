@@ -1,41 +1,34 @@
-import   React                from 'react';
-import   PrivateHeader        from './PrivateHeader';
-import   PayFeeView           from './PayFeeView';
+import   React                    from 'react';
+import   AddWalletDetailsForm     from './AddWalletDetailsForm';
+import   PrivateHeader            from './PrivateHeader';
 
-class PayFee extends React.Component{
+class AddWalletDetails extends React.Component{
 
   constructor(props){
     super(props);
     //initialize state
     this.state = {
-      error:'',
-      paymentDetails:{
-        voucherPin: ' ',bankToRedeem: ' ', voucherNum:''
-      }
-    };
+                  error:'',
+                  walletDetails: { userCell:'',userBank:'', userBankAcc:'' }
+                };
   }
 
 /*------------------------------------------------------------------------------/
-//////////////////     Form SubmitHandler (onSubmit callback)  /////////////////
+//////////////////  SubmitHandler (onSubmit callback)  ///////////////
 /------------------------------------------------------------------------------*/
   //Handles form submission
   submitDetails = (e) => {
     //prevent default action
     e.preventDefault();
-
-    //form input data
-    const paymentDetails = this.state.paymentDetails;
-
+    //signup form input data
+    const walletDetails = this.state.walletDetails;
    /*------------------------------------------------------/
-   _//////  Insert payment details into collection  __////
-  \__//////                                         ___////
-   \__///////                                         __////
+   ///// Insert user/wallet details into collection ///////
    /------------------------------------------------------*/
-    Meteor.call('payment.proof.insert', paymentDetails, (err, res) => {
+    Meteor.call('insert.wallet.details', walletDetails, (err, res) => {
          if (!err) {
-          //TODO:Maybe change state.
-          //and replacing the route
-          this.props.history.replace('/wait-jfee-confirmation'); //'/submit-pop'
+           //on success
+           this.props.history.replace('/pay-admin-fee');
          }else{
            this.setState({error:err.reason});
          }
@@ -43,18 +36,17 @@ class PayFee extends React.Component{
   }
 
 /*------------------------------------------------------------------------------/
-//////////     Form Inputs onChangeHandler (onChange callback)    //////////////
+//////////     Form Inputs onChangeHandler (onChange callback)  //////////////
 /------------------------------------------------------------------------------*/
   //Listens to form input element changes
   handleChange = (event) => {
 
     //creating a dummy object to modify
-    /* ###   dummy object UserDetails = { userName: value, bank: value etc.. } ### */
-    let paymentDetails = { ...this.state.paymentDetails };
+    let walletDetails = { ...this.state.walletDetails };
     //modify current matching key in cloned object
-    paymentDetails[ event.target.name ] = event.target.value;
+    walletDetails[ event.target.name ] = event.target.value;
     //set state to modified object
-    this.setState({ paymentDetails });
+    this.setState({ walletDetails });
     }
 
 /*------------------------------------------------------------------------------/
@@ -73,18 +65,16 @@ class PayFee extends React.Component{
     return(
       <div>
         <PrivateHeader { ...props } />
-        <PayFeeView
-          {/* Keys this side */ ...props /*Values this side*/ }
-          submitDetails ={ this.submitDetails }
-          handleChange  ={ this.handleChange  }
-        />
+        <AddWalletDetailsForm
+                  {/* Keys this side */ ...props /*Values this side*/ }
+                  submitDetails ={ this.submitDetails }
+                  handleChange  ={ this.handleChange  }
+         />
       </div>
-
-
     );
   }
 
 }
 
 //==> Export Component ==>//
-export default  PayFee;
+export default  AddWalletDetails;

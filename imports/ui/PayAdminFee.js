@@ -1,8 +1,8 @@
 import   React                from 'react';
-import   InvestmentPOPView    from './InvestmentPOPView';
+import   PrivateHeader        from './PrivateHeader';
+import   PayAdminFeeForm      from './PayAdminFeeForm';
 
-
-class InvestmentPOP extends React.Component{
+class PayAdminFee extends React.Component{
 
   constructor(props){
     super(props);
@@ -31,14 +31,13 @@ class InvestmentPOP extends React.Component{
   \__//////                                         ___////
    \__///////                                         __////
    /------------------------------------------------------*/
-    Meteor.call('investment.proof.insert', paymentDetails, (err, res) => {
+    Meteor.call('insert.admin.fee.proof', paymentDetails, (err, res) => {
          if (!err) {
-           //TODO:Maybe change state.
-           //and replacing the route
-           //this.props.history.replace('/invest'); //'/submit-pop'
+          //TODO:Maybe change state.
+          //and replacing the route
+          this.props.history.replace('/wait-admin-response'); //'/submit-pop'
          }else{
            this.setState({error:err.reason});
-           console.log(err);
          }
     });
   }
@@ -70,26 +69,22 @@ class InvestmentPOP extends React.Component{
   render(){
     //generate props to pass to UI
     const props = this._generateProps()
-    console.log(props.userStatus);
-    if (props.userStatus === 'hasPendingInv') {
 
-      return(
-        <div>
-          <InvestmentPOPView
-            {/* Keys this side */ ...props /*Values this side*/ }
-            submitDetails ={ this.submitDetails }
-            handleChange  ={ this.handleChange  }
-          />
-        </div>
-      );
-    }
-    else{
-      return null //can be anything...
-    }
+    return(
+      <div>
+        <PrivateHeader { ...props } />
+        <PayAdminFeeForm
+          {/* Keys this side */ ...props /*Values this side*/ }
+          submitDetails ={ this.submitDetails }
+          handleChange  ={ this.handleChange  }
+        />
+      </div>
 
+
+    );
   }
 
 }
 
 //==> Export Component ==>//
-export default  InvestmentPOP;
+export default  PayAdminFee;

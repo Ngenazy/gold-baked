@@ -1,15 +1,13 @@
 import   React          from 'react';
-import { Link }         from 'react-router-dom';
 import { PropTypes }    from 'prop-types';
 
-//SignupView Component
-const AddUserDetailsView = ({...props}) => (
+const AddWalletDetailsForm = ({...props}) => (
 
       <div className="page-content" >
           <div className="boxed-view__box">
-            <h1>Add Details</h1>
+            <h3>Receiving Wallet Details</h3>
 
-            { props.error ? <p> Provide Correct Details</p> : undefined }
+            { props.error ? <p className="smalltext__error">{props.error}</p> : undefined }
 
             <form onSubmit={props.submitDetails} noValidate >
 
@@ -43,4 +41,4 @@ const AddUserDetailsView = ({...props}) => (
       </div>
 )
 
-export default AddUserDetailsView;
+export default AddWalletDetailsForm;

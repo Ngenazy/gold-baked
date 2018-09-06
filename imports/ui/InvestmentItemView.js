@@ -3,7 +3,7 @@ import    ReactDOM    from 'react-dom';
 import {  PropTypes } from 'prop-types';
 import    FlipMove    from 'react-flip-move';
 
-const InvItemView = ( props ) => (
+const InvestmentItemView = ( props ) => (
 
       <div >
         <table>
@@ -15,6 +15,8 @@ const InvItemView = ( props ) => (
               <th>Interest</th>
               <th>Bank</th>
               <th>Acc#</th>
+              <th>Pay Day</th>
+              <th>Action</th>
             </tr>
           </thead>
 
@@ -24,8 +26,16 @@ const InvItemView = ( props ) => (
               <td>{ props.userCell          }</td>
               <td>R{ props.seedFund         }</td>
               <td>R{ props.seedFund * 0.3   }</td>
-              <td>{ props.bank          }</td>
-              <td>{ props.bankAcc       }</td>
+              <td>{ props.userBank          }</td>
+              <td>{ props.userBankAcc       }</td>
+              <td>{ props.nextPayDay        }</td>
+              <td>
+                <button
+                  onClick={ props.blockInvestment }
+                  name   ={ props._id }>
+                  Block
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -33,4 +43,4 @@ const InvItemView = ( props ) => (
       </div>
     )
 
-export default InvItemView;
+export default InvestmentItemView;

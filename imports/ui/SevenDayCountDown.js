@@ -4,54 +4,25 @@ import { Accounts  }    from 'meteor/accounts-base';
 import { Session   }    from 'meteor/session';
 import { Tracker   }    from 'meteor/tracker';
 import { PropTypes }    from 'prop-types';
-import   moment         from 'moment';
 
-
-class ClockCountDown extends React.Component{
+class SevenDayCountDown extends React.Component{
 
   constructor(props){
     super(props);
     //initialize state
-    this.state = { deadline: 0 };
+    this.state = { sevenDayDeadline: 0 };
   }
 
 /*------------------------------------------------------------------------------/
 //////////////////     Compose props and state into props         ///////////////
 /------------------------------------------------------------------------------*/
 //function to generate props
-  _generateProps = () => ({ ...this.props, ...this.state })
+_generateProps = () => ({ ...this.props, ...this.state })
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //commponent lifecycle hook functions
 componentDidMount(){
-
-
-  //this.clockTracker = Tracker.autorun(() => {
-          //const userId    =  Accounts.userId();
-          this.intervalID = setInterval( () => this.tick(),1000);
-          //subscribe to pop02
-          //Meteor.subscribe('capitalFeesPub');
-          //const capitalFeesDetails = CapitalFeesCol.find({ _id: userId }).fetch().pop();
-          //const invPackage   = { ...investment };
-
-          // const userDetails01 = Meteor.users.find({ _id: Meteor.userId() },
-          //                                       { fields: { "userDetails.popStatus":1 }}
-          //                                  ).fetch()[0];
-          //
-          // const userDetails02 = { ...userDetails01 };
-          // const userDetails   =  userDetails02.userDetails;
-          // const popStatus     = userDetails.popStatus;
-
-
-          //set state's plan options
-          //this.setState({ deadline });
-          //console.log(this.state.nowMoment);
-          //console.log(this.props.deadline);
-    //});
-
-  //console.log(props.deadline);
-
-
+  this.intervalID = setInterval( () => this.tick(),1000);
   }
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -68,10 +39,11 @@ tick(){
     let minutesSpan = clock.querySelector('.minutes');
     let secondsSpan = clock.querySelector('.seconds');
 
-    let deadline    = Session.get('deadline');
+    let sevenDayDeadline    = Session.get('sevenDayDeadline');
+
     //time remaining..
-    let time        = deadline - moment().valueOf()
-console.log(time);
+    let time        = sevenDayDeadline - moment().valueOf()
+
     let seconds     = Math.floor((time / 1000) % 60);
     let minutes     = Math.floor((time / 1000 / 60) % 60);
     let hours       = Math.floor((time / (1000 * 60 * 60)) % 24);
@@ -79,12 +51,19 @@ console.log(time);
 
 
     if (time < 0) {
-    clearInterval(this.intervalID);
+
+      const userId        =  Accounts.userId();
+      //this.setState({sevenDayDeadline:0 })//hack
+      clearInterval(this.intervalID);
+      //time up ...compute next pay day
+      Meteor.call('compute.next.pay.day', userId);
+      Accounts.logout();
+       this.props.history.replace('/login');//
   }else{
-    daysSpan.innerHTML    = days;
-    hoursSpan.innerHTML   = ('0' + hours).slice(-2);
-    minutesSpan.innerHTML = ('0' + minutes).slice(-2);
-    secondsSpan.innerHTML = ('0' + seconds).slice(-2);
+      daysSpan.innerHTML    = days;
+      hoursSpan.innerHTML   = ('0' + hours).slice(-2);
+      minutesSpan.innerHTML = ('0' + minutes).slice(-2);
+      secondsSpan.innerHTML = ('0' + seconds).slice(-2);
 
   }
 
@@ -98,7 +77,7 @@ console.log(time);
 
     return(
       <div>
-        <h4></h4>
+        <h4>Next Ca$h Payout in:</h4>
         <div id="clockdiv">
           <div>
             <span className="days">0</span>
@@ -125,4 +104,4 @@ console.log(time);
 }
 
 //==> Export Component ==>//
-export default ClockCountDown;
+export default SevenDayCountDown;

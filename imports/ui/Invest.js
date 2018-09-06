@@ -1,32 +1,31 @@
 //IMPORTS
-import  React                      from 'react';
-import {Meteor   }                 from 'meteor/meteor';
-import {Tracker  }                 from 'meteor/tracker';
-import {Accounts }                 from 'meteor/accounts-base';
-import { Link }                    from 'react-router-dom';
+import   React                      from 'react';
+import { Meteor   }                 from 'meteor/meteor';
+import { Tracker  }                 from 'meteor/tracker';
+import { Accounts }                 from 'meteor/accounts-base';
 //import containers
-import  PrivateHeader              from './PrivateHeader';
-import  CFeeItem                   from './CFeeItem';
-
+import   PrivateHeader              from './PrivateHeader';
+import   PackageItem                from './PackageItem';
 //import APIs
-import { CapitalFeesCol }          from '../api/xbuxAPI';
+import { PackageListCol  }          from '../api/xbuxAPI';
 
-class CapitalFeesPool extends React.Component{
+class Invest extends React.Component{
 
   constructor(props) {
       super(props);
       //initialize state
-      this.state = { capitalFees:[] }
+      this.state = { packages:[]  }
   }
 
   //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   componentDidMount(){
-     //Track changes
-    this.capitalFeesTracker = Tracker.autorun(() => {
+     //Track changes to package_list
+    this.packageListTracker = Tracker.autorun(() => {
 
       //subscribe to plansPub
       Meteor.subscribe('users');
-      Meteor.subscribe('capitalFeesPool');
+      Meteor.subscribe('packageListPub');
+
       //get custom data(fields)
       const userDetails01 = Meteor.users.find(
                               { _id:    Meteor.userId()   },
@@ -35,11 +34,10 @@ class CapitalFeesPool extends React.Component{
       //brush through....
       const userDetails02 = { ...userDetails01 };
       const userDetails   = { ...userDetails02.userDetails } ;
-
-      const capitalFees   = CapitalFeesCol.find({}).fetch();
+      const packages      = PackageListCol.find({}).fetch();
 
       //set state's plan options
-      this.setState({ capitalFees  });
+      this.setState({ packages });
     });
 
   }
@@ -47,7 +45,7 @@ class CapitalFeesPool extends React.Component{
   //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   componentWillUnmount(){
     //halt package list tracker
-    this.capitalFeesTracker.stop();
+    this.packageListTracker.stop();
   }
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -60,31 +58,24 @@ class CapitalFeesPool extends React.Component{
     const props = this._generateProps();
 
     //check if collection is empty
-    if (this.state.capitalFees.length === 0)
+    if (this.state.packages.length === 0)
     {
       return (
         <div >
-            <PrivateHeader { ...props } />
-          <p >No Investmet Capital POPs.</p>
+          <p >No Investment Plans.</p>
         </div>
       );
     }
 
-    const capitalFeesList = this.state.capitalFees.map((xbux) => {
+    const packageList = this.state.packages.map((xbux) => {
       //pack the lock together with data
-      return  <CFeeItem key = {xbux._id} {...this.props } { ...xbux }  />;
+      return  <PackageItem key = {xbux._id} {...this.props } { ...xbux }  />;
     });
 
     return (
       <div>
           <PrivateHeader { ...props } />
-          <ul>
-            <li><Link to='/xxx33xxx'>Joining Fees POPs</Link></li>
-            <li><Link to='/xxx34xxx'>Investments</Link></li>
-          </ul>
-
-
-          {  capitalFeesList }
+          {   packageList }
       </div>
 
     );
@@ -94,5 +85,5 @@ class CapitalFeesPool extends React.Component{
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 //::::::::::::::::::::::::::
-export default CapitalFeesPool;
+export default Invest;
 //::::::::::::::::::::::::::

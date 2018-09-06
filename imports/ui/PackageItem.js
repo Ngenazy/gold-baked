@@ -24,19 +24,19 @@ class PackageItem extends React.Component{
   }
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   //Handle pledge submission
-  handlePledgeRequest = (e) => {
+  createInvestment = (e) => {
     //e.preventDefault();
     const packageName = e.target.name;
 
-     Meteor.call('investment.create', packageName);
-     this.props.history.replace('/package-details');//  /submit-pop
+     Meteor.call('create.investment', packageName);
+     this.props.history.replace('/package-details');//
   }
 
   //function to generate props
   _generateProps = () => ({  ...this.props,  ...this.state  })
 
   render(){
-      return( <PackageItemView  { ...this.props } handlePledgeRequest = { this.handlePledgeRequest } />)
+      return( <PackageItemView  { ...this.props } createInvestment = { this.createInvestment } />)
   }
 }
 

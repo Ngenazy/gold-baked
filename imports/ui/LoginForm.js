@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 
 
 //LoginView (Presentational Component)
-const  LoginView = ({ ...props }) => (
+const  LoginForm = ({ ...props }) => (
 
   <div className="boxed-view">
     <div className="boxed-view__box">
       <h1> Login  </h1>
 
-      { props.loginError ? <p>{ props.loginError }</p> : undefined }
+      { props.loginError ? <p className="smalltext__error">{ props.loginError }</p> : undefined }
 
       <form onSubmit={props.submitHandler} noValidate >
 
@@ -38,4 +38,4 @@ const  LoginView = ({ ...props }) => (
   </div>
 )
 
-export default LoginView;
+export default LoginForm;

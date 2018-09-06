@@ -26,7 +26,7 @@ const PackageItemView = ( props ) => (
               <td>
               <button
                 className="button"
-                onClick={props.handlePledgeRequest}
+                onClick={props.createInvestment}
                 name={ props.package }>Invest</button>
               </td>
             </tr>

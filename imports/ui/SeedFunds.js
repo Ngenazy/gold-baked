@@ -6,40 +6,38 @@ import {Accounts }                 from 'meteor/accounts-base';
 import { Link }                    from 'react-router-dom';
 //import containers
 import  PrivateHeader              from './PrivateHeader';
-import  InvItem                    from './InvItem';
+import  SeedFundItem               from './SeedFundItem';
 
 //import APIs
-import { InvestmentsCol }          from '../api/xbuxAPI';
+import { SeedFundsCol }          from '../api/xbuxAPI';
 
-class InvestmentsPool extends React.Component{
+class SeedFunds extends React.Component{
 
   constructor(props) {
       super(props);
       //initialize state
-      this.state = { investments:[] }
+      this.state = { seedFunds:[] }
   }
 
   //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   componentDidMount(){
      //Track changes
-    this.investmentsPoolTracker = Tracker.autorun(() => {
+    this.seedFundsTracker = Tracker.autorun(() => {
+      //subscribe to
+      Meteor.subscribe('seedFundsPool');
+      // //get custom data(fields)
+      // const userDetails01 = Meteor.users.find(
+      //                         { _id:    Meteor.userId()   },
+      //                         { fields: { userDetails:1 } }
+      //                       ).fetch()[0];
+      // //brush through....
+      // const userDetails02 = { ...userDetails01 };
+      // const userDetails   = { ...userDetails02.userDetails } ;
 
-      //subscribe to plansPub
-      Meteor.subscribe('users');
-      Meteor.subscribe('investmentsPool');
-      //get custom data(fields)
-      const userDetails01 = Meteor.users.find(
-                              { _id:    Meteor.userId()   },
-                              { fields: { userDetails:1 } }
-                            ).fetch()[0];
-      //brush through....
-      const userDetails02 = { ...userDetails01 };
-      const userDetails   = { ...userDetails02.userDetails } ;
+      const seedFunds   = SeedFundsCol.find({}).fetch();
 
-      const investments   = InvestmentsCol.find({}).fetch();
-console.log(investments);
       //set state's plan options
-      this.setState({ investments });
+      this.setState({ seedFunds  });
     });
 
   }
@@ -47,7 +45,7 @@ console.log(investments);
   //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   componentWillUnmount(){
     //halt package list tracker
-    this.investmentsPoolTracker.stop();
+    this.seedFundsTracker.stop();
   }
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -60,30 +58,31 @@ console.log(investments);
     const props = this._generateProps();
 
     //check if collection is empty
-    if (this.state.investments.length === 0)
+    if (this.state.seedFunds.length === 0)
     {
       return (
         <div >
-          <p >No Investments Plans.</p>
+          <PrivateHeader { ...props } />
+          <p >No Investmet Capital POPs.</p>
         </div>
       );
     }
 
-    const investmentsList = this.state.investments.map((xbux) => {
+    const seedFundsList = this.state.seedFunds.map((xbux) => {
       //pack the lock together with data
-      return  <InvItem key = {xbux._id} {...this.props } { ...xbux }  />;
+      return  <SeedFundItem key = {xbux._id} {...this.props } { ...xbux }  />;
     });
 
     return (
       <div>
           <PrivateHeader { ...props } />
           <ul>
-            <li><Link to='/xxx33xxx'>Joining Fees POPs</Link></li>
-            <li><Link to='/xxx35xxx'>Capital Fees POPs</Link></li>
+            <li><Link to='/xxx33xxx'>Admin Fees Proofs</Link></li>
+            <li><Link to='/xxx34xxx'>All Investments</Link></li>
           </ul>
 
 
-          {  investmentsList }
+          {  seedFundsList }
       </div>
 
     );
@@ -93,5 +92,5 @@ console.log(investments);
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 //::::::::::::::::::::::::::
-export default InvestmentsPool;
+export default SeedFunds;
 //::::::::::::::::::::::::::

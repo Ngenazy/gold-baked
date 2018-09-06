@@ -3,7 +3,7 @@ import    ReactDOM    from 'react-dom';
 import {  PropTypes } from 'prop-types';
 import    FlipMove    from 'react-flip-move';
 
-const CFeeItemView = ( props ) => (
+const SeedFundItemView = ( props ) => (
 
       <div >
         <table>
@@ -12,6 +12,7 @@ const CFeeItemView = ( props ) => (
               <th>Voucher#</th>
               <th>Voucher Pin</th>
               <th>Redeem Bank</th>
+              <th>Submitted</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -21,10 +22,14 @@ const CFeeItemView = ( props ) => (
               <td>{ props.voucherNum          }</td>
               <td>{ props.voucherPin          }</td>
               <td>{ props.bankToRedeem        }</td>
+              <td>{ props.renderTimeLapsed    }</td>
               <td>
               <button
-                onClick={props.handlePledgeRequest}
-                name={ props._id }>Confirm</button>
+                onClick  ={props.confirmSeedFundProof }
+                name     ={ props._id }>Confirm</button>
+                <button
+                  onClick={props.confirmSeedFundProof }
+                  name   ={ props._id }>Reject</button>
               </td>
             </tr>
           </tbody>
@@ -33,4 +38,4 @@ const CFeeItemView = ( props ) => (
       </div>
     )
 
-export default CFeeItemView;
+export default SeedFundItemView;

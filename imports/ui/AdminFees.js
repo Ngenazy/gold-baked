@@ -3,29 +3,30 @@ import  React                      from 'react';
 import {Meteor   }                 from 'meteor/meteor';
 import {Tracker  }                 from 'meteor/tracker';
 import {Accounts }                 from 'meteor/accounts-base';
+import { Link    }                 from 'react-router-dom';
 //import containers
 import  PrivateHeader              from './PrivateHeader';
-import  InvItem                    from './InvItem';
-//import APIs
-import { InvestmentsCol }          from '../api/xbuxAPI';
+import  AdminFeeItem               from './AdminFeeItem';
 
-class InvestmentsPanel extends React.Component{
+//import APIs
+import { AdminFeesCol }            from '../api/xbuxAPI';
+
+class AdminFees extends React.Component{
 
   constructor(props) {
       super(props);
       //initialize state
-      this.state = { investments:[]  }
+      this.state = { adminFees:[] }
   }
 
   //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   componentDidMount(){
      //Track changes
-    this.collectionsTracker = Tracker.autorun(() => {
-
-      //subscribe to pool
-      Meteor.subscribe('investmentsPool');
-
-      //get custom data(fields)
+    this.adminFeesTracker = Tracker.autorun(() => {
+      //subscribe to plansPub
+      Meteor.subscribe('users');
+      Meteor.subscribe('adminFeesPool');
+      //get custom data
       const userDetails01 = Meteor.users.find(
                               { _id:    Meteor.userId()   },
                               { fields: { userDetails:1 } }
@@ -34,18 +35,18 @@ class InvestmentsPanel extends React.Component{
       const userDetails02 = { ...userDetails01 };
       const userDetails   = { ...userDetails02.userDetails } ;
 
-      const investments   = InvestmentsCol.find({}).fetch();
+      const adminFees   = AdminFeesCol.find({}).fetch();
 
       //set state's plan options
-      this.setState({ investments  });
+      this.setState({ adminFees  });
     });
 
   }
 
   //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   componentWillUnmount(){
-    //halt package list tracker
-    this.collectionsTracker.stop();
+    //halt tracker
+    this.adminFeesTracker.stop();
   }
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -58,24 +59,34 @@ class InvestmentsPanel extends React.Component{
     const props = this._generateProps();
 
     //check if collection is empty
-    if (this.state.investments.length === 0)
+    if (this.state.adminFees.length === 0)
     {
       return (
         <div >
-          <p >No Investment Plans.</p>
+          <PrivateHeader { ...props } />
+
+          <ul className="item__message">
+              <h3 >No Admin Fee Proofs submitted yet.</h3>
+            <li><h3><Link to='/xxx34xxx'>All Investments</Link></h3></li>
+            <li><Link to='/xxx35xxx'>Seed Funds POPs</Link></li>
+          </ul>
         </div>
       );
     }
 
-    const investmentsList = this.state.joiningFees.map((xbux) => {
-      //pack the lock together with data
-      return  <InvItem key = {xbux._id} {...this.props } { ...xbux }  />;
+    const adminFeesList = this.state.adminFees.map((xbux) => {
+      return  <AdminFeeItem key = {xbux._id} {...this.props } { ...xbux }  />;
     });
 
     return (
       <div>
           <PrivateHeader { ...props } />
-          {   investmentsList }
+          <ul  className="item__message">
+            <li><Link to='/xxx34xxx'>All Investments</Link></li>
+            <li><Link to='/xxx35xxx'>Seed Fund POPs</Link></li>
+          </ul>
+
+          {  adminFeesList }
       </div>
 
     );
@@ -85,5 +96,5 @@ class InvestmentsPanel extends React.Component{
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 //::::::::::::::::::::::::::
-export default InvestmentsPanel;
+export default AdminFees;
 //::::::::::::::::::::::::::

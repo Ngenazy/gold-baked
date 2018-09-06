@@ -3,15 +3,17 @@ import { Link }         from 'react-router-dom';
 import { PropTypes }    from 'prop-types';
 
 //SignupView Component
-const PayFeeView = ({...props}) => (
+const PayAdminFeeForm = ({...props}) => (
 
       <div className="page-content">
         <div className="boxed-view__box">
 
-          <h1> e-Wallet to: 073033 8833</h1>
+          <h5>Pay Admin fee via e-Wallet to:</h5>
+          <h1>078 801 2749</h1>
+          <h5>and submit proof of payment below</h5>
           <h3>Proof Of Payment</h3>
 
-          { props.error ? <p> Provide Correct Details</p> : undefined }
+          { props.error ? <p className="smalltext__error"> {props.error} </p> : undefined }
 
           <form onSubmit={props.submitDetails} noValidate >
             <input
@@ -44,4 +46,4 @@ const PayFeeView = ({...props}) => (
       </div>
 )
 
-export default PayFeeView;
+export default PayAdminFeeForm;

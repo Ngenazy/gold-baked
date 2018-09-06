@@ -1,15 +1,15 @@
-import   React          from 'react';
-import { Link }         from 'react-router-dom';
-import { PropTypes }    from 'prop-types';
-import   ClockCountDown01     from './ClockCountDown01';
+import React              from 'react';
+import { Link      }      from 'react-router-dom';
+import { PropTypes }      from 'prop-types';
+import SixHourCountDown   from './SixHourCountDown';
 //SignupView Component
-const InvestmentPOPView = ({...props}) => (
+const PaySeedFundsForm = ({...props}) => (
 
       <div>
         <div className="boxed-view__box">
-           e-wallet to: 073 033 8833
-          <ClockCountDown01 {...props } />
-          <h1>Proof of Payment</h1>
+           e-wallet your Seed/Investment Fund to: <span className="package--detail">078 801 2749</span> within
+          <SixHourCountDown {...props } />
+          <h3>Proof of Payment</h3>
 
           { props.error ? <p> Provide Correct Details</p> : undefined }
 
@@ -34,7 +34,7 @@ const InvestmentPOPView = ({...props}) => (
                type="text"
                name="bankToRedeem"
                className = "form__input"
-               placeholder="Bank to redeem voucher"
+               placeholder="Bank to Redeem Voucher"
                onChange={props.handleChange}
              />
 
@@ -44,4 +44,4 @@ const InvestmentPOPView = ({...props}) => (
       </div>
 )
 
-export default InvestmentPOPView;
+export default  PaySeedFundsForm;

@@ -6,27 +6,27 @@ import {Accounts }                 from 'meteor/accounts-base';
 import { Link }                    from 'react-router-dom';
 //import containers
 import  PrivateHeader              from './PrivateHeader';
-import  JFeeItem                   from './JFeeItem';
+import  InvestmetItem              from './InvestmentItem';
 
 //import APIs
-import { JoiningFeesCol }          from '../api/xbuxAPI';
+import { InvestmentsCol }          from '../api/xbuxAPI';
 
-class AdminPanel extends React.Component{
+class Investments extends React.Component{
 
   constructor(props) {
       super(props);
       //initialize state
-      this.state = { joiningFees:[] }
+      this.state = { investments:[] }
   }
 
   //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   componentDidMount(){
      //Track changes
-    this.collectionsTracker = Tracker.autorun(() => {
+    this.investmentsTracker = Tracker.autorun(() => {
 
       //subscribe to plansPub
       Meteor.subscribe('users');
-      Meteor.subscribe('joiningFeesPool');
+      Meteor.subscribe('investmentsPool');
       //get custom data(fields)
       const userDetails01 = Meteor.users.find(
                               { _id:    Meteor.userId()   },
@@ -36,18 +36,18 @@ class AdminPanel extends React.Component{
       const userDetails02 = { ...userDetails01 };
       const userDetails   = { ...userDetails02.userDetails } ;
 
-      const joiningFees   = JoiningFeesCol.find({}).fetch();
-
+      const investments   = InvestmentsCol.find({}).fetch();
+console.log(investments);
       //set state's plan options
-      this.setState({ joiningFees  });
+      this.setState({ investments });
     });
 
   }
 
   //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   componentWillUnmount(){
-    //halt package list tracker
-    this.collectionsTracker.stop();
+    //halt  tracker
+    this.investmentsTracker.stop();
   }
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -60,29 +60,35 @@ class AdminPanel extends React.Component{
     const props = this._generateProps();
 
     //check if collection is empty
-    if (this.state.joiningFees.length === 0)
+    if (this.state.investments.length === 0)
     {
       return (
         <div >
-          <p >No Investment Plans.</p>
+          <PrivateHeader { ...props } />
+          <ul  className="item__message">
+            <h3  className="item__message">No Investments Packages yet...</h3>
+            <li><Link to='/xxx33xxx'>Admin Fee Proofs</Link></li>
+            <li><Link to='/xxx35xxx'>Seed Fund POPs</Link></li>
+          </ul>
         </div>
       );
     }
 
-    const joiningFeesList = this.state.joiningFees.map((xbux) => {
+    const investmentsList = this.state.investments.map((xbux) => {
       //pack the lock together with data
-      return  <JFeeItem key = {xbux._id} {...this.props } { ...xbux }  />;
+      return  <InvestmetItem key = {xbux._id} {...this.props } { ...xbux }  />;
     });
 
     return (
       <div>
           <PrivateHeader { ...props } />
           <ul>
-            <li><Link to='/xxx34xxx'>Investments</Link></li>
-            <li><Link to='/xxx35xxx'>Investments POPs</Link></li>
+            <li><Link to='/xxx33xxx'>Admin Fee Proofs</Link></li>
+            <li><Link to='/xxx35xxx'>Seed Fund Proofs</Link></li>
           </ul>
 
-          {  joiningFeesList }
+
+          {  investmentsList }
       </div>
 
     );
@@ -92,5 +98,5 @@ class AdminPanel extends React.Component{
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 //::::::::::::::::::::::::::
-export default AdminPanel;
+export default Investments;
 //::::::::::::::::::::::::::

@@ -1,55 +1,61 @@
 import   React                from 'react';
-import   AddUserDetailsView   from './AddUserDetailsView';
-import   PrivateHeader        from './PrivateHeader';
+import   PaySeedFundForm      from './PaySeedFundForm';
 
-class AddUserDetails extends React.Component{
+
+class PaySeedFund extends React.Component{
 
   constructor(props){
     super(props);
     //initialize state
     this.state = {
       error:'',
-      userDetails: { userCell:'',userBank:'', userBankAcc:'' }
+      paymentDetails:{
+        voucherPin: ' ',bankToRedeem: ' ', voucherNum:''
+      }
     };
   }
 
 /*------------------------------------------------------------------------------/
-////////////////// Signup Form SubmitHandler (onSubmit callback)  ///////////////
+//////////////////     Form SubmitHandler (onSubmit callback)  /////////////////
 /------------------------------------------------------------------------------*/
   //Handles form submission
   submitDetails = (e) => {
     //prevent default action
     e.preventDefault();
 
-    //signup form input data
-    const userDetails = this.state.userDetails;
+    //form input data
+    const paymentDetails = this.state.paymentDetails;
 
    /*------------------------------------------------------/
-   ///////  Insert user details into collection  //////////
+   _//////  Insert payment details into collection  __////
+  \__//////                                         ___////
+   \__///////                                         __////
    /------------------------------------------------------*/
-    Meteor.call('user.details.insert', userDetails, (err, res) => {
+    Meteor.call('insert.seed.fund.proof', paymentDetails, (err, res) => {
          if (!err) {
+           //TODO:Maybe change state.
            //and replacing the route
-           this.props.history.replace('/pay-fee');
+           this.props.history.replace('/package-details'); //'/submit-pop'
          }else{
            this.setState({error:err.reason});
+           console.log(err);
          }
     });
   }
 
 /*------------------------------------------------------------------------------/
-////////// Signup Form Inputs onChangeHandler (onChange callback)  //////////////
+//////////     Form Inputs onChangeHandler (onChange callback)    //////////////
 /------------------------------------------------------------------------------*/
   //Listens to form input element changes
   handleChange = (event) => {
 
     //creating a dummy object to modify
     /* ###   dummy object UserDetails = { userName: value, bank: value etc.. } ### */
-    let userDetails = { ...this.state.userDetails };
+    let paymentDetails = { ...this.state.paymentDetails };
     //modify current matching key in cloned object
-    userDetails[ event.target.name ] = event.target.value;
+    paymentDetails[ event.target.name ] = event.target.value;
     //set state to modified object
-    this.setState({ userDetails });
+    this.setState({ paymentDetails });
     }
 
 /*------------------------------------------------------------------------------/
@@ -64,21 +70,26 @@ class AddUserDetails extends React.Component{
   render(){
     //generate props to pass to UI
     const props = this._generateProps()
+    console.log(props.userStatus);
+    if (props.userStatus === 'userWithLockedInvestment') {
 
-    return(
-      <div>
-        <PrivateHeader { ...props } />
-        <AddUserDetailsView
-                  {/* Keys this side */ ...props /*Values this side*/ }
-                  submitDetails ={ this.submitDetails }
-                  handleChange  ={ this.handleChange  }
-                />
-      </div>
+      return(
+        <div>
+          <PaySeedFundForm
+            {/* Keys this side */ ...props /*Values this side*/ }
+            submitDetails ={ this.submitDetails }
+            handleChange  ={ this.handleChange  }
+          />
+        </div>
+      );
+    }
+    else{
+      return <h1>WTF?</h1> //can be anything...
+    }
 
-          );
   }
 
 }
 
 //==> Export Component ==>//
-export default  AddUserDetails;
+export default  PaySeedFund;

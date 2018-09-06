@@ -21,12 +21,22 @@ h2{
   color: white;//#fd961a;
 }
 
-p{
+h3{
+  font-weight: 200;
   margin-bottom: $space;
+  color: #fd961a;
+}
+
+p{
+  //margin-bottom: $space;
 }
 
 a{
   color:white;
+}
+
+li{
+  font-weight: 400;
 }
 
 input[type="text"], input[type="email"], input[type="password"]{
@@ -78,6 +88,12 @@ td,
 th {
   vertical-align: middle;
 }
+.smalltext__error{
+	padding-top: 5px;
+  color: red;
+	font-size: 1.28rem;
+}
+
 
 // magic stuff
 
@@ -86,6 +102,9 @@ th {
 	table, thead, tbody, th, td, tr {
 		display: block;
 	}
+  .admin__tbl >	table, thead, tbody, th, td, tr {
+  		display: block;
+  	}
 
 	thead tr {
     display: none;

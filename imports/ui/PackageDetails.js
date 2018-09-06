@@ -1,15 +1,15 @@
 import   React            from 'react';
-import { Meteor }         from 'meteor/meteor';
-import { Session }        from 'meteor/session';
-import { Tracker }        from 'meteor/tracker';
+import { Meteor   }       from 'meteor/meteor';
+import { Session  }       from 'meteor/session';
+import { Tracker  }       from 'meteor/tracker';
 import { Accounts }       from 'meteor/accounts-base';
-import InvestmentPOP      from './InvestmentPOP';
-import ClockCountDown     from './ClockCountDown';
+import PaySeedFund        from './PaySeedFund';
+import SevenDayCountDown  from './SevenDayCountDown';
 //import views
-import PrivateHeader        from './PrivateHeader';
+import PrivateHeader      from './PrivateHeader';
 
 //import APIs
-import { InvestmentsCol,CapitalFeesCol } from '../api/xbuxAPI';
+import { InvestmentsCol,SeedFundsCol } from '../api/xbuxAPI';
 
 //export const PHOrders     = new Mongo.Collection('ph_orders')
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -22,8 +22,7 @@ class PackageDetails extends React.Component{
         deadline: 0,
         userStatus:'',
         invPackage:{},
-        packageStatus: '',
-        capitalFeeDetails:{}
+        packageStatus: ''
       };
 
       }
@@ -31,72 +30,49 @@ class PackageDetails extends React.Component{
   //commponent lifecycle hook functions
   componentDidMount(){
 
-    this.investmentsTracker = Tracker.autorun(() => {
-            const userId        =  Accounts.userId();
+    this.investmentTracker = Tracker.autorun(() => {
+
+            const userId  =  Accounts.userId();
+            //sub to stuff...
             Meteor.subscribe('investmentsPub');
-            Meteor.subscribe('capitalFeesPub');
+            Meteor.subscribe('seedFundsPub');
+            Meteor.subscribe('userStatusPub');
+            //...........................
+            const userDetails01 =  Meteor.users.find(
+                                  { _id: Meteor.userId()  },
+                                  { fields:{ "userDetails.userStatus":1 }}
+                                ).fetch()[0];
+              //brush through....
+              const userDetails02 = { ...userDetails01 };
+              const userDetails   = { ...userDetails02.userDetails } ;
+              const userStatus    = userDetails.userStatus;
+              //.........................
 
             //..... 4 timer02 ......//
-            const packageDetails = CapitalFeesCol.find({ _id: userId }).fetch().pop();
-            const capitalFeeDetails ={ ...packageDetails };
-            const deadline      = capitalFeeDetails.submittedAt;
+            const packageDetails = SeedFundsCol.find({ _id: userId }).fetch().pop();
+            const seedFundDetails ={ ...packageDetails };
+            const deadline      = seedFundDetails.submittedAt;
             Session.set('deadline', deadline);
             //..... ..... ..... .....
 
             //..... ..... ..... .....
             const investment    = InvestmentsCol.find({ _id: userId }).fetch().pop();
             const invPackage    = { ...investment };
-            const deadline01    = invPackage.deadline01;
-            console.log(invPackage);
-            Session.set('deadline01', deadline01);
+            const sixHrDeadline    = invPackage.sixHrDeadline;
+            const sevenDayDeadline    = invPackage.sevenDayDeadline;
+
+            Session.set('sixHrDeadline', sixHrDeadline);
+            Session.set('sevenDayDeadline',sevenDayDeadline );
             //..... ..... ..... .....
 
-            const userDetails01 = Meteor.users.find(
-                                    { _id: Meteor.userId() },
-                                    {
-                                      fields: {
-                                        "userDetails.userStatus":1,
-                                        "userDetails.popStatus":1
-                                      }
-                                    }
-                                  ).fetch()[0];
-
-            const userDetails02 = { ...userDetails01 };
-            const userDetails03 =  userDetails02.userDetails;
-            const userDetails   =  { ...userDetails03 };
-            const userStatus    = userDetails.userStatus; // user status
-            const popStatus     = userDetails.popStatus;  //pop status
-
             //if all is w....
-            if (userStatus === 'hasActiveInv') {
+            if (userStatus === 'userWithActiveInvestment') {
               this.setState({ packageStatus: 'Active' })
             }
             else{
-              this.setState( { packageStatus: 'Locked',popStatus } )
+              this.setState( { packageStatus: 'Locked' } )
             }
 
-        // const map = userStatus.map((item) => {
-        //   return item;
-        // });
-
-        //Decide Subscriptions
-        // if (userStatus.planType === 'lean' ) {
-        //   //subscribe to plansPub
-        //   Meteor.subscribe('orders300LeanPub');
-        //
-        // }else if (userStatus.planType === 'bronze') {
-        //   //subscribe to plansPub
-        //   Meteor.subscribe('orders500Pub');
-        //   console.log('Subscribed');
-        // }else if (userStatus.planType === 'silver') {
-        //   //subscribe to plansPub
-        //   Meteor.subscribe('orders800Pub');
-        // }else if (userStatus.planType === 'gold') {
-        //   //subscribe to plansPub
-        //   Meteor.subscribe('orders1800Pub');
-        // }
-
-  console.log(deadline);
         //set state's plan options
         this.setState({ invPackage,userStatus,deadline });
 
@@ -105,7 +81,7 @@ class PackageDetails extends React.Component{
   }
 
   componentWillUnmount(){
-    this.investmentsTracker.stop();
+    this.investmentTracker.stop();
   }
 
   //Handle pledge submission
@@ -136,73 +112,89 @@ class PackageDetails extends React.Component{
 
       const props = this._generateProps()
 
-console.log(props.deadline);
-      if (props.userStatus === "hasActiveInv") {
+      if (props.userStatus === "userWithActiveInvestment") {
         //return order details
         return (
           <div >
             <PrivateHeader { ...props } />
             <div className="page-content">
-               <h2>Investment Package Details </h2>
-                 <div className="player player__name">Investment Type:   { props.packageName }        <br/>
-                 Status:            {this.state.packageStatus }   <br/>
-                 Seed Fund  :       R{ props.seedFund }            <br/>
-                 Weekly Payout:     R{props.seedFund * 0.3 }
-
-              <ClockCountDown {...props } />
+               <h1>Investment Package Details </h1>
+               <ul>
+                <li>Investment Type:<span className="package--detail">{ props.packageName }</span></li>
+                <li>Status:<span className="status__active">{this.state.packageStatus }</span></li>
+                <li> Seed Fund:<span className="package--detail">R{ props.seedFund }</span></li>
+                <li> Weekly Payout:<span className="package--detail">R{props.seedFund * 0.3 }</span></li>
+                <li> Pay Day:<span className="package--detail">{props.nextPayDay }</span></li>
+               </ul>
+              <SevenDayCountDown {...props } />
             </div>
           </div>
-        </div>
 
-          );
+          )
       }
-      else if(props.popStatus === "payingCapital"){
+      else if(props.userStatus === "userWithDefaultedPayment"){
         return(
           <div>
             <PrivateHeader { ...props } />
             <div className="page-content">
-               <h2>Thanks! wait for admin to confirm </h2>
+               <h2>Lol..Fake You!</h2>
             </div>
           </div>
         )
       }
-      else if(props.userStatus === "hasPendingInv"){
+      else if(props.userStatus === "userWithLockedInvestment"){
         return (
           <div >
             <PrivateHeader { ...props } />
             <div className="page-content">
-               <h2>Investment Package Details </h2>
-                 <div className="player player__name">Investment Type:   { props.packageName }        <br/>
-                   <p>Status:            {this.state.packageStatus }   </p><br/>
-                   Seed Fund  :       R{ props.seedFund }            <br/>
-                  Weekly Payout:     R{props.seedFund * 0.3 }       <br/>
-                </div>         <br/>
-                <div>
-                    <InvestmentPOP {...props }/>
-                </div>
+              <div >
+                <h2>Investment Package Details </h2>
 
+                <ul>
+                  <li>Investment Type:<span className="package--detail">{ props.packageName }</span></li>
+                  <li>Status:<span className="status__inactive">{this.state.packageStatus }</span></li>
+                  <li>Seed Fund  :<span className="package--detail">R{ props.seedFund }</span></li>
+                  <li>Weekly Payout:<span className="package--detail">R{props.seedFund * 0.3 }</span></li>
+                </ul>
+
+                <PaySeedFund {...props }/>
+              </div>
             </div>
           </div>
-          );
+          )
 
+      }else if(props.userStatus === "userWithSeedFundProof"){
+        return(
+          <div >
+            <PrivateHeader { ...props } />
+            <div className="page-content">
+
+                 <div >
+                  <h1>................*****................</h1>
+                  <h2>Investment Package Details </h2>
+                  <h1>.......................................</h1>
+                   <div className="package-pair">
+                     <p>Investment Type:<span className="package--detail">{ props.packageName }</span></p>
+                   </div>
+                   <div className="package-pair">
+                     <p>Status:<span className="package--detail">Waiting Admin Confirmation</span>   </p>
+                   </div>
+                   <div className="package-pair">
+                    <p>Seed Fund  :<span className="package--detail">R{ props.seedFund }</span></p>
+                   </div>
+                   <div className="package-pair">
+                     <p>Weekly Payout:<span className="package--detail">R{props.seedFund * 0.3 }</span></p>
+                   </div>
+
+                </div>
+            </div>
+          </div>
+          )
       }else{
-        return  <h1>Wait you will be matched soon...</h1>
+        return <p>No data available</p>
       }
 
-        // return (
-        //   <div >
-        //     <PrivateHeader { ...props } />
-        //     <div className="page-content">
-        //        <h2>Investment Package Details </h2>
-        //          <div className="player player__name">Investment Type:   { props.packageName }        <br/>
-        //          Status:            {this.state.packageStatus }   <br/>
-        //          Seed Fund  :       R{ props.seedFund }            <br/>
-        //         Weekly Payout:     R{props.seedFund * 0.3 }       <br/>
-        //          Withdrawal Date:   22-08-2018           </div>         <br/>
-        //       <InvestmentPOP {...props }/>
-        //     </div>
-        //   </div>
-        //   );
+
     }
 }
 

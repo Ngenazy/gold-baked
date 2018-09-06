@@ -1,14 +1,14 @@
 import   React        from 'react';
 import { Meteor }     from 'meteor/meteor';
-import   SignupView   from './SignupView';
 import { Accounts }   from 'meteor/accounts-base';
+import  SignupForm    from './SignupForm';
 
 class Signup extends React.Component{
 
   constructor(props){
     super(props);
     //initialize state
-    this.state = { signupError:'', email:'',password:'' };
+    this.state = { signupError:'', username:'',password:'' };
   }
 
 /*------------------------------------------------------------------------------/
@@ -31,8 +31,6 @@ class Signup extends React.Component{
    /*------------------------------------------------------/
    //////////////////  Create User Object  /////////////////
    /------------------------------------------------------*/
-  // const userLevel = 1;
-  //const userStatus= 'inNone';
    //create user object
    Accounts.createUser({ username, password },(err) => {
       //if there was an error
@@ -42,7 +40,7 @@ class Signup extends React.Component{
        //cleaning up previous error msgs
        this.setState({signupError:''});
        //and replacing the route
-       this.props.history.replace('/add-details');
+       this.props.history.replace('/add-wallet-details');
      }
     });
   }
@@ -69,12 +67,7 @@ class Signup extends React.Component{
     //generate props to pass to UI
     const props = this._generateProps()
 
-    return(  <SignupView
-                { ...props }
-                submitHandler = {this.submitHandler}
-                handleChange  = {this.handleChange}
-              />
-          );
+    return(  <SignupForm { ...props } submitHandler = {this.submitHandler} handleChange  = {this.handleChange}/>);
   }
 
 }
